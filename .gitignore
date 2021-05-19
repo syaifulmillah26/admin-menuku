@@ -36,3 +36,4 @@
 .env
 log/development.log
 tmp/miniprofiler/*
+.vscode
