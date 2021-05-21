@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :api do
       resources :companies
       resources :outlets
+      resources :business_types
 
       resources :provinces, only: %i[index]
       resources :cities, only: %i[index]

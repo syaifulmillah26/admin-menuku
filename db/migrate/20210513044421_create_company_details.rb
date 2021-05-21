@@ -4,6 +4,7 @@ class CreateCompanyDetails < ActiveRecord::Migration[6.1]
       t.belongs_to :company
       t.integer :address_id
       t.string :npwp
+      t.integer :data_filled, default: 0
 
       t.timestamps
     end

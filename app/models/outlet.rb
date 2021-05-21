@@ -2,7 +2,7 @@
 
 # Outlet
 class Outlet < ApplicationRecord
-  include StateMachines::Company
+  include StateMachines::Outlet
   belongs_to  :company
 
   belongs_to  :address,
@@ -11,5 +11,7 @@ class Outlet < ApplicationRecord
 
   # after_create :generate_uuid
 
-  accepts_nested_attributes_for :address, update_only: true, allow_destroy: true
+  accepts_nested_attributes_for :address,
+                                update_only: true,
+                                allow_destroy: true
 end

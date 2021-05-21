@@ -66,6 +66,12 @@ ActiveRecord::Schema.define(version: 2021_05_14_123403) do
     t.index ["subdistrict_id"], name: "index_addresses_on_subdistrict_id"
   end
 
+  create_table "business_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "province_id"
     t.string "city_name"
@@ -75,17 +81,21 @@ ActiveRecord::Schema.define(version: 2021_05_14_123403) do
   end
 
   create_table "companies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "registration_id"
+    t.bigint "user_id"
+    t.bigint "business_type_id"
     t.string "company_name"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["business_type_id"], name: "index_companies_on_business_type_id"
+    t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
   create_table "company_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "company_id"
     t.integer "address_id"
     t.string "npwp"
+    t.integer "data_filled", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["company_id"], name: "index_company_details_on_company_id"
@@ -128,8 +138,7 @@ ActiveRecord::Schema.define(version: 2021_05_14_123403) do
   create_table "user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "address_id"
-    t.string "firstname"
-    t.string "lastname"
+    t.string "fullname"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_user_details_on_user_id"

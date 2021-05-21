@@ -3,6 +3,7 @@
 module Api
   # subdistrict controller
   class SubdistrictsController < Api::ResourceController
+    before_action :authenticate_user, except: %i[index]
     def index
       @objects = model_class.all
       @all = total
