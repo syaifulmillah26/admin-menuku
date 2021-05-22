@@ -3,6 +3,7 @@
 # User
 class User < ApplicationRecord
   include StateMachines::User
+  include UuidHelper
 
   acts_as_paranoid
 
@@ -18,18 +19,20 @@ class User < ApplicationRecord
   has_one :user_detail, class_name: 'UserDetail', dependent: :destroy, inverse_of: :user
   has_one :address, through: :user_detail
 
-  after_create :assign_default_role
-  after_create :assign_default_user_detail
   after_create :send_email_confirmation
-  after_create :generate_uuid
+  after_create :assign_default_role
+
+  accepts_nested_attributes_for :user_detail
 
   private
 
-  def generate_uuid
-    update_column(:uuid, SecureRandom.hex(30))
+  def check_uuid
+    User.where(uuid: @uuid)
   end
 
   def send_email_confirmation
+    return user.confirm! unless user.roles.blank?
+
     update_column(:confirmation_token, SecureRandom.hex(50))
     update_column(:confirmation_sent_at, DateTime.now)
     DeviseMailer.with(object: user).confirmation_instructions.deliver_later
@@ -37,11 +40,6 @@ class User < ApplicationRecord
 
   def assign_default_role
     user.add_role(:user) if user.roles.blank?
-  end
-
-  def assign_default_user_detail
-    address = Address.create(address1: nil)
-    UserDetail.create(user_id: user.id, address_id: address.id)
   end
 
   def user

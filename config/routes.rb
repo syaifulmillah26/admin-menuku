@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :cities, only: %i[index]
       resources :subdistricts, only: %i[index]
 
+      resources :roles
       resources :users do
         collection do
           get :profile

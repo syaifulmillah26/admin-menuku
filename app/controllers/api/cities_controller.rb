@@ -3,14 +3,15 @@
 module Api
   # cities api
   class CitiesController < Api::ResourceController
-    before_action :authenticate_user, except: %i[index]
+    skip_before_action :authenticate_user
     def index
-      @objects = model_class.all
-      @all = total
-      if params[:province_id].present?
-        @objects = model_class.where(province_id: params[:province_id])
-      end
-      render json: all_datas, status: :ok
+      status, result = Officer::States::City.new(
+        params
+      ).perform
+
+      return render json: result, status: 422 unless status
+
+      render json: result, status: :ok
     rescue StandardError => e
       render json: { message: e.message }, status: 422
     end
