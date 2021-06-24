@@ -9,9 +9,14 @@ class Outlet < ApplicationRecord
               class_name: 'Address',
               dependent: :destroy
 
-  # after_create :generate_uuid
+  has_many    :employees,
+              class_name: 'Menuku::User',
+              dependent: :destroy
 
   accepts_nested_attributes_for :address,
                                 update_only: true,
+                                allow_destroy: true
+
+  accepts_nested_attributes_for :employees,
                                 allow_destroy: true
 end

@@ -9,8 +9,6 @@ module StateMachines
         event :active do
           transition to: :active, from: %i[inactive not_set]
         end
-
-        after_transition to: :active, do: :generate_uuid
       end
     end
   end

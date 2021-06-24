@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_22_120736) do
+ActiveRecord::Schema.define(version: 2021_06_05_211240) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -81,10 +81,9 @@ ActiveRecord::Schema.define(version: 2021_05_22_120736) do
   end
 
   create_table "companies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "uuid", null: false
-    t.string "user_id"
-    t.bigint "business_type_id"
+    t.integer "user_id"
     t.string "company_name"
+    t.bigint "business_type_id"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -92,7 +91,7 @@ ActiveRecord::Schema.define(version: 2021_05_22_120736) do
   end
 
   create_table "company_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "company_id"
+    t.integer "company_id"
     t.integer "address_id"
     t.string "npwp"
     t.integer "data_filled", default: 0
@@ -101,15 +100,13 @@ ActiveRecord::Schema.define(version: 2021_05_22_120736) do
   end
 
   create_table "outlets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "uuid", null: false
-    t.string "company_id"
+    t.integer "company_id"
     t.integer "address_id"
     t.string "name"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "slug"
-    t.index ["slug"], name: "index_outlets_on_slug", unique: true
+    t.string "qr_code"
   end
 
   create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -137,7 +134,7 @@ ActiveRecord::Schema.define(version: 2021_05_22_120736) do
   end
 
   create_table "user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "user_id"
+    t.integer "user_id"
     t.integer "address_id"
     t.string "fullname"
     t.datetime "created_at", precision: 6, null: false
@@ -145,7 +142,6 @@ ActiveRecord::Schema.define(version: 2021_05_22_120736) do
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "uuid", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

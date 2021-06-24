@@ -5,23 +5,28 @@ module Officer
     # email confirmation
     class EmailConfirmation < ::Api::ApplicationController
       attr_reader :params
+      include MailHelper
 
       def initialize(params)
         @params = params
       end
 
-      def send
-        user = ::User.find_by(confirmation_token: params[:token])
-        return false, t('officer.account.user_not_found') unless user
+      # activate
+      def activate
+        return error_message(I18n.t('officer.not_found', r: 'Token')) if \
+          params[:token].blank?
+        return error_message(I18n.t('officer.not_found', r: 'User')) \
+          unless user
 
-        begin
-          user.confirm!
-          DeviseMailer.with(object: user).activated_email.deliver_later
-          data = { message: t('officer.account.email.activate') }
-          return true, data
-        rescue StandardError => e
-          return false, e.message
-        end
+        user.confirm!
+        send_mail_activated(user)
+        [200, { message: t('officer.account.email.activate') }]
+      end
+
+      private
+
+      def user
+        ::User.find_by(confirmation_token: params[:token])
       end
     end
   end

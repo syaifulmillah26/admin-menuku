@@ -4,66 +4,79 @@ module Officer
   module Account
     # email confirmation
     class Password < ::Api::ApplicationController
-      include UserHelper
-      attr_reader :params, :current_user
+      attr_reader :params
+      include MailHelper
 
-      def initialize(params, current_user)
+      def initialize(params)
         @params = params
-        @user = current_user
+        @user = params[:current_user]
       end
 
-      def send_reset_password
-        @user = ::User.find_by(email: params[:email])
-        return false, t('officer.account.user_not_found') if @user.blank?
+      # reset password
+      def reset_password
+        return error_message(t('officer.invalid_params')) if \
+          params[:email].blank?
 
-        reset_password_token
+        @user = find_user_by_email
+        return error_message(I18n.t('officer.not_found', r: 'User')) \
+          unless @user
+
+        send_reset_password_token
+        [200, { message: t('officer.account.new_link_password') }]
       end
 
-      def reset_password_token
-        begin
-          @user.reset_password_token = SecureRandom.hex(30)
-          @user.reset_password_sent_at = DateTime.now
-          @user.save!
-          DeviseMailer.with(object: @user).reset_password_instructions.deliver_later
-          return true, { message: t('officer.account.new_link_password') }
-        rescue StandardError => e
-          return false, e.message
-        end
+      # set new password
+      def new_password
+        return error_message(t('officer.invalid_params')) if \
+          params[:email].blank? || params[:token].blank?
+
+        @user = find_user_by_reset_password_token
+        return error_message(t('officer.account.token_expired')) \
+          unless @user
+
+        save_password
+        [200, { message: t('officer.account.password_saved') }]
       end
 
-      def save_new_password
-        @user = User.find_by(email: params[:email], reset_password_token: params[:token])
-        return false, t('officer.account.token_expired') unless @user
-
-        save
-      end
-
+      # change password
       def change_password
-        message = t('officer.account.password_does_not_match')
-        return false, { message: message } unless check_hashed_password
+        return error_message(t('officer.account.wrong_current_password')) \
+          unless check_current_password
 
-        save
-      end
-
-      def save
-        begin
-          @user.encrypted_password = hashed_password
-          @user.save!
-          DeviseMailer.with(object: @user).password_change.deliver_later
-          return true, { message: t('officer.account.password_saved') }
-        rescue StandardError => e
-          return false, e.message
-        end
+        save_password
+        [200, { message: t('officer.account.password_saved') }]
       end
 
       private
+
+      def save_password
+        @user.update_column(:encrypted_password, hashed_password)
+        @user.update_column(:reset_password_token, nil)
+        send_mail_password_changed(@user)
+      end
+
+      def send_reset_password_token
+        @user.update_column(:reset_password_token, secure_random_token)
+        @user.update_column(:reset_password_sent_at, current_time)
+        send_mail_instruction(@user)
+      end
+
+      def find_user_by_email
+        ::User.find_by(email: params[:email])
+      end
+
+      def find_user_by_reset_password_token
+        User.find_by(
+          email: params[:email], reset_password_token: params[:token]
+        )
+      end
 
       def hashed_password
         BCrypt::Password.create(params[:password])
       end
 
-      def check_hashed_password
-        BCrypt::Password.new(@user.encrypted_password) == params[:old_password]
+      def check_current_password
+        BCrypt::Password.new(@user.encrypted_password) == params[:current_password]
       end
     end
   end

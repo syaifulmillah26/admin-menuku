@@ -48,9 +48,6 @@ module Api
     end
 
     def destroy
-      data = { message: 'You have no right to do this' }
-      return render json: data, status: 422 unless admin_permission
-
       return invalid_resource!(@object) unless @object.destroy
 
       render json: { message: t('officer.success') }, status: :ok
@@ -73,10 +70,6 @@ module Api
     private
 
     def set_object
-      if model_class == User
-        return @object = model_class.friendly.find(params[:id])
-      end
-
       @object = model_class.find(params[:id])
     rescue StandardError => e
       render json: { error: e.message }, status: 500

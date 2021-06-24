@@ -25,3 +25,22 @@ test:
 production:
   <<: *default
   database: <%= ENV['ADMIN_DATABASE'] %>
+
+
+# ===============================
+# OUTLETS MENUKU
+# ===============================
+menuku_default: &menuku_default
+  adapter: mysql2
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+
+menuku:
+  <<: *menuku_default
+  database: <%= ENV['MENUKU_DATABASE'] %>
+
+menuku_test:
+  <<: *menuku_default
+  database: <%= ENV['MENUKU_DATABASE_TEST'] %>

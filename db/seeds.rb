@@ -4,6 +4,7 @@
 # Examples:
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-  User.create(email: 'saeful@rubyh.co', password: 'rubyh2225', password_confirmation: 'rubyh2225')
-  User.create(email: 'iqbal@rubyh.co', password: 'rubyh2225', password_confirmation: 'rubyh2225')
-  User.create(email: 'raska@rubyh.co', password: 'rubyh2225', password_confirmation: 'rubyh2225')
+
+BusinessType.create([{ name: 'Cafe' }, { name: 'Restaurant' }])
+Role.create([{ name: 'admin' }, { name: 'user' }])
+User.create(email: 'admin@rubyh.co', role_ids: [1], password: '111111', password_confirmation: '111111')

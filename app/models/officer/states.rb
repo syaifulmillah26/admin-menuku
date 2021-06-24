@@ -11,51 +11,33 @@ module Officer
 
     # Main
     class City < States
-      def perform
-        return false, { message: t('officer.invalid_params') } \
-          unless check_params
+      def grab_all
+        return error_message(t('officer.invalid_params')) \
+          unless params[:province_id].present?
 
-        begin
-          [true, cities]
-        rescue StandardError => e
-          return false, e.message
-        end
+        [200, cities]
       end
+
+      private
 
       def cities
         ::City.where(province_id: params[:province_id])
-      end
-
-      def check_params
-        return false if \
-          params[:province_id].blank?
-
-        true
       end
     end
 
     # Main
     class Subdistrict < States
-      def perform
-        return false, { message: t('officer.invalid_params') } \
-          unless check_params
+      def grab_all
+        return error_message(t('officer.invalid_params')) \
+          unless params[:city_id].present?
 
-        begin
-          [true, subdistricts]
-        rescue StandardError => e
-          return false, e.message
-        end
+        [200, subdistricts]
       end
+
+      private
 
       def subdistricts
         ::Subdistrict.where(city_id: params[:city_id])
-      end
-
-      def check_params
-        return false if \
-          params[:city_id].blank?
-
-        true
       end
     end
   end
