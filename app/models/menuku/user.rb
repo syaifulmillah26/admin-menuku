@@ -4,7 +4,6 @@
 class Menuku
   # class company from Menuku db
   class User < Menuku
-
     devise  :database_authenticatable, :registerable,
             :recoverable, :rememberable, :validatable, :timeoutable,
             :trackable and :omniauthable
@@ -23,7 +22,8 @@ class Menuku
     private
 
     def set_default_role
-      Menuku::UsersRole.create!(user_id: id, role_id: 1)
+      role = Menuku::Role.create!(name: 'admin', outlet_id: outlet_id)
+      Menuku::UsersRole.create!(user_id: id, role_id: role.id)
     end
 
     def set_company_id

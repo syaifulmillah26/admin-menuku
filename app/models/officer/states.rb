@@ -15,7 +15,7 @@ module Officer
         return error_message(t('officer.invalid_params')) \
           unless params[:province_id].present?
 
-        [200, cities]
+        [200, results(cities)]
       end
 
       private
@@ -31,7 +31,7 @@ module Officer
         return error_message(t('officer.invalid_params')) \
           unless params[:city_id].present?
 
-        [200, subdistricts]
+        [200, results(subdistricts)]
       end
 
       private

@@ -6,11 +6,11 @@ module Api
     skip_before_action :authenticate_user
 
     def index
-      status, @result = Officer::States::City.new(
+      status, result = Officer::States::City.new(
         params
       ).grab_all
 
-      render json: results, status: status
+      render json: result, status: status
     rescue StandardError => e
       render json: { message: e.message }, status: 500
     end

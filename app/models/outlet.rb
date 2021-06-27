@@ -3,6 +3,7 @@
 # Outlet
 class Outlet < ApplicationRecord
   include StateMachines::Outlet
+  include ApplicationHelper
   belongs_to  :company
 
   belongs_to  :address,
@@ -19,4 +20,6 @@ class Outlet < ApplicationRecord
 
   accepts_nested_attributes_for :employees,
                                 allow_destroy: true
+
+  after_create :set_slug
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_05_211240) do
+ActiveRecord::Schema.define(version: 2021_06_27_000312) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -72,12 +72,10 @@ ActiveRecord::Schema.define(version: 2021_06_05_211240) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "cities", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "cities", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
     t.integer "province_id"
     t.string "city_name"
-    t.string "postal_code"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.string "postal_code", limit: 5
   end
 
   create_table "companies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -107,12 +105,11 @@ ActiveRecord::Schema.define(version: 2021_06_05_211240) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "qr_code"
+    t.string "slug"
   end
 
-  create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "provinces", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
     t.string "province_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -126,11 +123,9 @@ ActiveRecord::Schema.define(version: 2021_06_05_211240) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "subdistricts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "subdistricts", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
     t.integer "city_id"
     t.string "subdistrict_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
