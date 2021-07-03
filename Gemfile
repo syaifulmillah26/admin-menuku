@@ -7,7 +7,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 6.1.3', '>= 6.1.3.1'
 # Use sqlite3 as the database for Active Record
 
-
 # gem 'mysql2'
 gem 'pg'
 gem 'devise'
@@ -25,7 +24,7 @@ gem 'acts_as_list', '~> 0.7.2'
 gem 'haml-rails'
 gem 'awesome_nested_set' # act_as_nested_set
 gem 'active_model_serializers'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails', groups: [:development, :test, :production]
 gem 'rails-i18n'
 
 # Use Puma as the app server
