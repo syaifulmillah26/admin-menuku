@@ -22,8 +22,7 @@ module Knock
     def token
       {
         message: 'success',
-        auth_token: auth_token&.token,
-        outlet: entity.outlet.slug
+        auth_token: auth_token&.token
       }
     end
 
@@ -64,8 +63,8 @@ module Knock
     end
 
     def inactive_entity?
-      data = { message: t('officer.account.email.inactive') }
-      return render json: data, status: 422 if entity.inactive?
+      data = { message: t('officer.account.email.unconfirmed') }
+      return render json: data, status: 422 if entity.unconfirmed?
 
       valid_password?
     end

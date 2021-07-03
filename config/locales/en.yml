@@ -71,9 +71,11 @@ en:
       token_not_found: No Token Found
       password_saved: Password saved!
       password_empty: Password empty
+      wrong_password: Wrong Password
       wrong_current_password: Wrong current password
       email:
         activate: Email Activated
+        unconfirmed: Please confirm your email
         inactive: Email inactive, please ask your admin to activate your account
         not_registered: Email is not registered, yet!
     add: Add
