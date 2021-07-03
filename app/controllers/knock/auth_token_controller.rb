@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'knock/application_controller'
+# require_dependency 'knock/application_controller'
 # module
 module Knock
   # knock gem
@@ -8,18 +8,23 @@ module Knock
     before_action :authenticate
 
     def create
-      render json: auth_token, status: :created
+      render json: token, status: :created
+    rescue StandardError => e
+      render json: { message: e.message }, status: 500
     end
 
     private
 
     def authenticate
-      data = { message: 'Please confirm your email before continuing!' }
-      return render json: data, status: 422 if entity.unconfirmed?
+      entity?
+    end
 
-      wrong_email_or_pass = entity.authenticate(auth_params[:password])
-      data = { message: 'Wrong email or password' }
-      return render json: data, status: 422 unless wrong_email_or_pass
+    def token
+      {
+        message: 'success',
+        auth_token: auth_token&.token,
+        outlet: entity.outlet.slug
+      }
     end
 
     def auth_token
@@ -50,5 +55,32 @@ module Knock
     def auth_params
       params.require(:auth).permit :email, :password
     end
+
+    def entity?
+      data = { message: t('officer.account.email.not_registered') }
+      return render json: data, status: 422 unless entity
+
+      inactive_entity?
+    end
+
+    def inactive_entity?
+      data = { message: t('officer.account.email.inactive') }
+      return render json: data, status: 422 if entity.inactive?
+
+      valid_password?
+    end
+
+    def valid_password?
+      valid_password = entity.authenticate(auth_params[:password])
+      data = { message: t('officer.account.wrong_password') }
+      return render json: data, status: 422 unless valid_password
+    end
+
+    # def inactive_company?
+    #   data = { message: 'Your Company banned' }
+    #   return render json: data, status: 422 if entity.company.inactive?
+
+    #   wrong_email_or_pass?
+    # end
   end
 end
