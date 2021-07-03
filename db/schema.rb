@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2021_06_27_000312) do
 
-  create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
-    t.text "body", size: :long
+    t.text "body"
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -32,7 +35,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -44,13 +47,13 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "addresses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "addresses", force: :cascade do |t|
     t.string "address1"
     t.string "address2"
     t.string "zipcode"
@@ -66,19 +69,19 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["subdistrict_id"], name: "index_addresses_on_subdistrict_id"
   end
 
-  create_table "business_types", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "business_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "cities", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
+  create_table "cities", id: :integer, default: nil, force: :cascade do |t|
     t.integer "province_id"
     t.string "city_name"
     t.string "postal_code", limit: 5
   end
 
-  create_table "companies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "companies", force: :cascade do |t|
     t.integer "user_id"
     t.string "company_name"
     t.bigint "business_type_id"
@@ -88,7 +91,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["business_type_id"], name: "index_companies_on_business_type_id"
   end
 
-  create_table "company_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "company_details", force: :cascade do |t|
     t.integer "company_id"
     t.integer "address_id"
     t.string "npwp"
@@ -97,7 +100,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "outlets", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "outlets", force: :cascade do |t|
     t.integer "company_id"
     t.integer "address_id"
     t.string "name"
@@ -108,11 +111,11 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.string "slug"
   end
 
-  create_table "provinces", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
+  create_table "provinces", id: :integer, default: nil, force: :cascade do |t|
     t.string "province_name"
   end
 
-  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
     t.bigint "resource_id"
@@ -123,12 +126,12 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "subdistricts", id: :integer, default: nil, charset: "utf8", force: :cascade do |t|
+  create_table "subdistricts", id: :integer, default: nil, force: :cascade do |t|
     t.integer "city_id"
     t.string "subdistrict_name"
   end
 
-  create_table "user_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "user_details", force: :cascade do |t|
     t.integer "user_id"
     t.integer "address_id"
     t.string "fullname"
@@ -136,7 +139,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -167,7 +170,7 @@ ActiveRecord::Schema.define(version: 2021_06_27_000312) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  create_table "users_roles", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users_roles", id: false, force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"

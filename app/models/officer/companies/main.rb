@@ -18,7 +18,8 @@ module Officer
       end
 
       def update
-        return root_not_found if company.blank?
+        return error_message(I18n.t('officer.not_found', r: 'Route')) if \
+          company.blank?
 
         company.update(company_params)
         [200, result(company)]

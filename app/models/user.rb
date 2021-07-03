@@ -26,8 +26,7 @@ class User < ApplicationRecord
             inverse_of: :user
 
   after_create :send_email_confirmation
-  after_create :assign_default_role
-  after_create :set_company
+  # after_create :assign_default_role
 
   accepts_nested_attributes_for :user_detail,
                                 update_only: true,
@@ -41,6 +40,7 @@ class User < ApplicationRecord
     update_column(:confirmation_token, secure_random_token)
     update_column(:confirmation_sent_at, current_time)
     send_mail_confirmation_instructions(self)
+    set_company
   end
 
   def assign_default_role
@@ -52,6 +52,6 @@ class User < ApplicationRecord
   end
 
   def set_company
-    Company.create!(user_id: id) if is_user?
+    Company.create!(user_id: id)
   end
 end

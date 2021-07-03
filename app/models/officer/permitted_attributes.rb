@@ -25,7 +25,7 @@ module Officer
     ]
 
     @@company_detail_attributes = [
-      :id, :company_name, address_attributes: address_attributes
+      :id, :company_name, :npwp, address_attributes: address_attributes
     ]
 
     @@company_attributes = [
