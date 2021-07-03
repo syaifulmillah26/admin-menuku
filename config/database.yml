@@ -33,9 +33,10 @@ production:
 menuku_default: &menuku_default
   adapter: postgresql
   encoding: unicode
+  host: <%= ENV['MENUKU_HOST'] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
+  username: <%= ENV['MENUKU_USERNAME'] %>
+  password: <%= ENV['MENUKU_PASSWORD'] %>
 
 menuku:
   <<: *menuku_default
